@@ -1,0 +1,5 @@
+## Interface: 11200
+## Author: shirsig
+## Title: retarget
+## Notes: Retargets Hunters after Feign Death and Rogues after Stealth
+retarget.lua
