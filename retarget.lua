@@ -13,11 +13,11 @@ local unit, retarget
 CreateFrame'Frame':SetScript('OnUpdate', function()
 	local target = UnitName'target'
 	if target then
-		unit, retarget = not UnitIsDead'target' and target, false
+		unit, dead, retarget = target, UnitIsDead'target', false
 	elseif unit then
 		TargetByName(unit, true)
-		if UnitName'target' then
-			if not (retarget or UnitIsDead'target' and feigning()) then
+		if UnitExists'target' then
+			if not (retarget or (not dead and UnitIsDead'target' and feigning())) then
 				ClearTarget()
 				unit, retarget = nil, false
 			end
