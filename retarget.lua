@@ -1,28 +1,28 @@
-local hunter, rogue, vanished
+local function feigning()
+	local i, buff = 1, nil
+	repeat
+		buff = UnitBuff('target', i)
+		if buff == [[Interface\Icons\Ability_Rogue_FeignDeath]] then
+			return true
+		end
+		i = i + 1
+	until not buff
+	return UnitCanAttack('player', 'target')
+end
+local unit, retarget
 CreateFrame'Frame':SetScript('OnUpdate', function()
 	local target = UnitName'target'
 	if target then
-		local _, class = UnitClass'target'
-		if UnitIsEnemy('player', 'target') then
-			hunter, rogue = class == 'HUNTER' and target, class == 'ROGUE' and target
-		else
-			hunter, rogue = nil, nil
-		end
-	elseif hunter then
-		TargetByName(hunter)
-		if not UnitIsDead'target' or not UnitCanAttack('player', 'target') then
-			ClearTarget()
-			hunter = nil
-		end
-	elseif rogue then
-		TargetByName(rogue)
-		if UnitExists'target' then
-			if not vanished then
+		unit, retarget = not UnitIsDead'target' and target, false
+	elseif unit then
+		TargetByName(unit, true)
+		if UnitName'target' then
+			if not (retarget or UnitIsDead'target' and feigning()) then
 				ClearTarget()
-				rogue = nil
+				unit, retarget = nil, false
 			end
 		else
-			vanished = true
+			retarget = true
 		end
 	end
 end)
