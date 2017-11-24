@@ -16,11 +16,10 @@ CreateFrame'Frame':SetScript('OnUpdate', function()
 	if target then
 		unit, dead, retarget = target, UnitIsDead'target', false
 	elseif unit then
-		local orig = UIErrorsFrame_OnEvent
-		UIErrorsFrame_OnEvent = pass
+		local _PlaySound, _UIErrorsFrame_OnEvent = PlaySound, UIErrorsFrame_OnEvent
+		PlaySound, UIErrorsFrame_OnEvent = retarget and PlaySound or pass, pass
 		TargetByName(unit, true)
-		UIErrorsFrame_OnEvent = orig
-		error = true
+		PlaySound, UIErrorsFrame_OnEvent = _PlaySound, _UIErrorsFrame_OnEvent
 		if UnitExists'target' then
 			if not (retarget or (not dead and UnitIsDead'target' and feigning())) then
 				ClearTarget()
