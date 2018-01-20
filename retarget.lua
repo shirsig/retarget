@@ -9,24 +9,24 @@ local function feigning()
 	until not buff
 	return UnitCanAttack('player', 'target')
 end
-local unit, retarget
+local unit, lost
 local pass = function() end
 CreateFrame'Frame':SetScript('OnUpdate', function()
 	local target = UnitName'target'
 	if target then
-		unit, dead, retarget = target, UnitIsDead'target', false
+		unit, dead, lost = target, UnitIsDead'target', false
 	elseif unit then
 		local _PlaySound, _UIErrorsFrame_OnEvent = PlaySound, UIErrorsFrame_OnEvent
-		PlaySound, UIErrorsFrame_OnEvent = retarget and PlaySound or pass, pass
+		PlaySound, UIErrorsFrame_OnEvent = lost and PlaySound or pass, pass
 		TargetByName(unit, true)
 		PlaySound, UIErrorsFrame_OnEvent = _PlaySound, _UIErrorsFrame_OnEvent
 		if UnitExists'target' then
-			if not (retarget or (not dead and UnitIsDead'target' and feigning())) then
+			if not (lost or (not dead and UnitIsDead'target' and feigning())) then
 				ClearTarget()
-				unit, retarget = nil, false
+				unit, lost = nil, false
 			end
 		else
-			retarget = true
+			lost = true
 		end
 	end
 end)
