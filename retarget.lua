@@ -9,7 +9,7 @@ local function feigning()
 	until not buff
 	return UnitCanAttack('player', 'target')
 end
-local unit, lost
+local unit, dead, lost
 local pass = function() end
 CreateFrame'Frame':SetScript('OnUpdate', function()
 	local target = UnitName'target'
